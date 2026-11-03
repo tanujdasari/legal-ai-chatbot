@@ -1,0 +1,615 @@
+#root {
+  min-height: 100vh;
+}
+
+.app-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: #101e32;
+  border-right: 1px solid #28374c;
+  padding: 24px 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  color: #d6b77c;
+  margin-bottom: 32px;
+}
+
+.brand h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.brand p {
+  margin: 3px 0;
+  font-size: 12px;
+  color: #aab8ca;
+}
+
+.new-chat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #234b7b;
+  color: white;
+  border: 0;
+  padding: 13px;
+  border-radius: 9px;
+}
+
+.new-chat:hover {
+  background: #32649b;
+}
+
+.sidebar-section {
+  margin-top: 35px;
+}
+
+.sidebar-section h4 {
+  color: #8495aa;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 5px;
+  color: #c9d5e3;
+  font-size: 14px;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #8b9bb0;
+}
+
+.main-panel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: #0b1525;
+}
+
+.topbar {
+  padding: 20px 30px;
+  border-bottom: 1px solid #28374c;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topbar-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #d6b77c;
+}
+
+.topbar-title h1 {
+  color: #f5f7fb;
+  margin: 0;
+  font-size: 20px;
+}
+
+.topbar-title p {
+  color: #94a6bd;
+  margin: 5px 0 0;
+  font-size: 12px;
+}
+
+.status-badge {
+  background: #173c37;
+  color: #83d9b1;
+  border-radius: 20px;
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 18px 30px;
+  border-bottom: 1px solid #28374c;
+}
+
+.controls label {
+  display: flex;
+  flex: 1;
+  min-width: 150px;
+  flex-direction: column;
+  gap: 8px;
+  color: #aab8ca;
+  font-size: 12px;
+}
+
+.controls select,
+.controls input {
+  background: #17263d;
+  border: 1px solid #344459;
+  color: #f5f7fb;
+  border-radius: 8px;
+  padding: 11px;
+  width: 100%;
+}
+
+.chat-window {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 30px max(24px, calc((100% - 900px) / 2));
+}
+
+.welcome {
+  text-align: center;
+  padding: 70px 15px;
+  color: #d6b77c;
+}
+
+.welcome h1 {
+  color: #f5f7fb;
+  font-size: 27px;
+}
+
+.welcome p {
+  color: #b9c6d7;
+}
+
+.welcome span {
+  font-size: 13px;
+  color: #8294ab;
+}
+
+.message {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.message.user {
+  flex-direction: row-reverse;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #243b58;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #d6b77c;
+}
+
+.message-content {
+  max-width: 85%;
+  min-width: 0;
+}
+
+.message-role {
+  font-size: 12px;
+  color: #d6b77c;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.message.user .message-role {
+  text-align: right;
+}
+
+.message-text {
+  background: #17263d;
+  border: 1px solid #283b54;
+  border-radius: 12px;
+  padding: 16px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.message.user .message-text {
+  background: #234b7b;
+  border-color: #345e90;
+}
+
+.message-disclaimer,
+.message-sources {
+  margin-top: 10px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #94a6bd;
+}
+
+.typing {
+  color: #b9c6d7;
+  font-size: 14px;
+}
+
+.chat-input-area {
+  padding: 15px 30px 20px;
+  border-top: 1px solid #28374c;
+}
+
+.chat-input-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #17263d;
+  border: 1px solid #344459;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.chat-input-box textarea {
+  flex: 1;
+  resize: none;
+  background: transparent;
+  color: white;
+  border: 0;
+  outline: none;
+  min-width: 0;
+}
+
+.chat-input-box button {
+  background: #d6b77c;
+  color: #142238;
+  border: 0;
+  padding: 12px;
+  border-radius: 9px;
+}
+
+.input-note {
+  text-align: center;
+  color: #8294ab;
+  font-size: 11px;
+}
+
+.error-banner {
+  margin: 10px 30px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #542c36;
+  color: #ffccd4;
+}
+
+@media (max-width: 760px) {
+  .sidebar {
+    display: none;
+  }
+
+  .topbar {
+    padding: 15px;
+  }
+
+  .controls {
+    padding: 12px;
+  }
+
+  .chat-window {
+    padding: 20px 12px;
+  }
+
+  .chat-input-area {
+    padding: 12px;
+  }
+
+  .message-content {
+    max-width: 90%;
+  }
+
+  .status-badge {
+    display: none;
+  }
+}
+/* =========================================
+   STEP 5 — LEGAL DOCUMENT UPLOAD
+========================================= */
+
+.document-upload {
+  padding: 12px 30px;
+  border-bottom: 1px solid #28374c;
+  background: #101e32;
+}
+
+.document-upload label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #234b7b;
+  color: #ffffff;
+  padding: 12px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+
+.document-upload label:hover {
+  background: #32649b;
+}
+
+.document-upload input[type="file"] {
+  display: none;
+}
+
+.document-upload p {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: #b9c6d7;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================
+   UPLOADED DOCUMENT STATUS
+========================================= */
+
+.document-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 30px;
+  background: #173c37;
+  color: #a7e5c6;
+  font-size: 13px;
+  border-bottom: 1px solid #285c50;
+}
+
+.document-status span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.document-status button {
+  background: transparent;
+  border: 1px solid #7dbb9f;
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: #a7e5c6;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.document-status button:hover {
+  background: #24554c;
+}
+
+.document-status button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   RESPONSIVE PDF UPLOAD
+========================================= */
+
+@media (max-width: 760px) {
+  .document-upload {
+    padding: 12px;
+  }
+
+  .document-upload label {
+    width: 100%;
+  }
+
+  .document-status {
+    padding: 12px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .document-status button {
+    width: 100%;
+  }
+}
+/* Legal PDF Upload */
+
+.document-upload {
+  padding: 12px 24px;
+  border-bottom: 1px solid #28374c;
+}
+
+.document-upload label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #234b7b;
+  color: #ffffff;
+  padding: 11px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.document-upload label:hover {
+  background: #30639c;
+}
+
+.document-upload input {
+  display: none;
+}
+
+.upload-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.upload-message.success {
+  color: #68d391;
+}
+
+.upload-message.error {
+  color: #fc8181;
+}
+
+/* PostgreSQL Chat History Sidebar */
+
+.sidebar-section {
+  margin-top: 24px;
+  padding: 0 15px;
+}
+
+.sidebar-section-title {
+  color: #8fa5c1;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  margin-bottom: 12px;
+}
+
+.sidebar-empty {
+  color: #8394aa;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.conversation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-height: 310px;
+  overflow-y: auto;
+}
+
+.conversation-item {
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  background: transparent;
+}
+
+.conversation-item:hover {
+  background: #1a304c;
+}
+
+.conversation-item.active {
+  background: #234b7b;
+}
+
+.conversation-open {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex: 1;
+  min-width: 0;
+  padding: 10px 8px;
+  border: none;
+  background: transparent;
+  color: #dce7f7;
+  text-align: left;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.conversation-open span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.conversation-delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border: none;
+  background: transparent;
+  color: #8fa5c1;
+  cursor: pointer;
+}
+
+.conversation-delete:hover {
+  color: #fc8181;
+}
+
+.conversation-open:disabled,
+.conversation-delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Sidebar layout fixes */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 16px;
+}
+
+.sidebar-brand h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.sidebar-brand p {
+  margin: 4px 0 0;
+  font-size: 11px;
+}
+
+.new-chat-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 8px 15px;
+  padding: 12px;
+  background: #234b7b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.new-chat-button:hover {
+  background: #30639c;
+}
+
+.sidebar-info-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 4px;
+  color: #dce7f7;
+  font-size: 12px;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 16px;
+}
+

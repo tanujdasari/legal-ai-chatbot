@@ -1,0 +1,48 @@
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Node.js
+node_modules/
+dist/
+.vite/
+coverage/
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploaded legal documents
+backend/storage/
+backend/uploads/
+uploads/
+storage/
+
+# FAISS indexes
+*.faiss
+*.index
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+backend/sample_contract.pdf
