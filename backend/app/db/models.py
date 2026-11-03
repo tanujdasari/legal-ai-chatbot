@@ -69,6 +69,10 @@ class Conversation(Base):
         order_by="Message.created_at",
     )
 
+    documents: Mapped[list["Document"]] = relationship(
+        back_populates="conversation",
+    )
+
 
 class Message(Base):
     __tablename__ = "messages"
@@ -118,8 +122,57 @@ class Message(Base):
     )
 
 
+class Document(Base):
+    __tablename__ = "documents"
+
+    id: Mapped[str] = mapped_column(
+        String(36),
+        primary_key=True,
+        default=lambda: str(uuid4()),
+    )
+
+    filename: Mapped[str] = mapped_column(
+        String(255),
+        nullable=False,
+    )
+
+    jurisdiction: Mapped[str] = mapped_column(
+        String(2),
+        nullable=False,
+    )
+
+    storage_id: Mapped[str] = mapped_column(
+        String(36),
+        unique=True,
+        nullable=False,
+    )
+
+    conversation_id: Mapped[str | None] = mapped_column(
+        ForeignKey(
+            "conversations.id",
+            ondelete="SET NULL",
+        ),
+        nullable=True,
+    )
+
+    uploaded_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=utc_now,
+        nullable=False,
+    )
+
+    conversation: Mapped["Conversation | None"] = relationship(
+        back_populates="documents",
+    )
+
+
 Index(
     "ix_messages_conversation_created",
     Message.conversation_id,
     Message.created_at,
+)
+
+Index(
+    "ix_documents_conversation",
+    Document.conversation_id,
 )
