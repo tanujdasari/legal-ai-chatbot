@@ -13,6 +13,7 @@ export default function SavedDocuments({
   conversationId,
   onSelectDocument,
   onDocumentDeleted,
+  selectedDocumentId = null,
   refreshKey = 0,
   disabled = false,
 }) {
@@ -143,14 +144,18 @@ export default function SavedDocuments({
       {documents.map((doc) => (
         <div
           key={doc.document_id}
-          className="saved-document-item"
+          className={`saved-document-item ${
+  selectedDocumentId === doc.document_id
+    ? "saved-document-active"
+    : ""
+}`}
         >
           <button
             type="button"
             disabled={disabled || deletingId !== null}
             onClick={() =>
-              onSelectDocument(doc.document_id)
-            }
+  onSelectDocument(doc.document_id, doc.filename)
+}
             className="saved-document-select"
             title="Use this PDF for legal questions"
           >

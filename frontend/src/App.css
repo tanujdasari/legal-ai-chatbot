@@ -670,3 +670,27 @@
   cursor: not-allowed;
 }
 
+/* Active PDF highlighting */
+
+.saved-document-active {
+  border-color: #3b82f6;
+  background: #172f50;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.25);
+}
+
+.saved-document-active .saved-document-select {
+  color: #93c5fd;
+}
+
+.document-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.document-status span {
+  overflow-wrap: anywhere;
+}
+

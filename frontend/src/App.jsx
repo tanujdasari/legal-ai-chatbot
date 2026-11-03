@@ -82,6 +82,7 @@ export default function App() {
   const [documentId, setDocumentId] = useState(null);
   const [documentVersion, setDocumentVersion] = useState(0);
   const [documentsRefreshKey, setDocumentsRefreshKey] = useState(0);
+  const [activeDocumentName, setActiveDocumentName] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [historyLoading, setHistoryLoading] = useState(true);
@@ -214,6 +215,7 @@ export default function App() {
     setDocumentId(null);
     setDocumentVersion((previous) => previous + 1);
     setError("");
+    setActiveDocumentName("");
   }
 
   async function handleSelectConversation(conversationId) {
@@ -233,6 +235,7 @@ export default function App() {
       setState(conversation.state || "");
 
       setDocumentId(savedDocument?.document_id || null);
+      setActiveDocumentName(savedDocument?.filename || "");
       setDocumentVersion((previous) => previous + 1);
 
       setMessages(
@@ -329,6 +332,11 @@ export default function App() {
       }
       await attachDocument(id, conversationId);
       setDocumentId(id);
+      const documentInfo = await documentRequest(
+  `/api/documents/${encodeURIComponent(id)}`
+);
+
+setActiveDocumentName(documentInfo.filename || "");
       setDocumentsRefreshKey((previous) => previous + 1);
       await refreshConversations();
     } catch (err) {
@@ -343,6 +351,7 @@ export default function App() {
   function handleRemoveDocument() {
     if (busyRef.current) return;
     setDocumentId(null);
+    setActiveDocumentName("");
     setDocumentVersion((previous) => previous + 1);
     setError("");
   }
@@ -432,14 +441,17 @@ export default function App() {
 <SavedDocuments
   conversationId={activeConversationId}
   refreshKey={documentsRefreshKey}
+  selectedDocumentId={documentId}
   disabled={loading || historyLoading}
-  onSelectDocument={(id) => {
+  onSelectDocument={(id, filename) => {
     setDocumentId(id);
+    setActiveDocumentName(filename);
     setError("");
   }}
   onDocumentDeleted={(deletedId) => {
     if (documentId === deletedId) {
       setDocumentId(null);
+      setActiveDocumentName("");
       setDocumentVersion((previous) => previous + 1);
     }
 
@@ -450,11 +462,15 @@ export default function App() {
 
 
 
+
+
         {documentId && (
           <div className="document-status">
             <span>
-              PDF attached to this chat. Questions will use its contents.
-            </span>
+  {activeDocumentName
+    ? `Active PDF: ${activeDocumentName}`
+    : "PDF selected. Questions will use its contents."}
+</span>
 
             <button
               type="button"
