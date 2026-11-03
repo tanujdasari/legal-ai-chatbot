@@ -6,6 +6,7 @@ import Sidebar from "./components/Sidebar";
 import ChatWindow from "./components/ChatWindow";
 import ChatInput from "./components/ChatInput";
 import DocumentUpload from "./components/DocumentUpload";
+import SavedDocuments from "./components/SavedDocuments";
 
 import { sendLegalQuestion } from "./services/api";
 import {
@@ -17,6 +18,33 @@ import {
 } from "./services/historyApi";
 
 import "./App.css";
+
+const API_BASE = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
+async function documentRequest(path, options = {}) {
+  const response = await fetch(`${API_BASE}${path}`, {
+    ...options,
+    headers: { "Content-Type": "application/json", ...options.headers },
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(typeof data.detail === "string" ? data.detail : `Document API error (${response.status})`);
+  }
+  return response.json();
+}
+
+async function getConversationDocument(conversationId) {
+  const documents = await documentRequest("/api/documents");
+  return documents.find((doc) => doc.conversation_id === conversationId) || null;
+}
+
+async function attachDocument(documentId, conversationId) {
+  return documentRequest(`/api/documents/${encodeURIComponent(documentId)}/conversation`, {
+    method: "PATCH",
+    body: JSON.stringify({ conversation_id: conversationId }),
+  });
+}
+
 
 const categories = [
   "immigration",
@@ -53,6 +81,7 @@ export default function App() {
 
   const [documentId, setDocumentId] = useState(null);
   const [documentVersion, setDocumentVersion] = useState(0);
+  const [documentsRefreshKey, setDocumentsRefreshKey] = useState(0);
 
   const [loading, setLoading] = useState(false);
   const [historyLoading, setHistoryLoading] = useState(true);
@@ -127,6 +156,9 @@ export default function App() {
         conversationId = conversation.id;
         setActiveConversationId(conversationId);
 
+        if (documentId) {
+          await attachDocument(documentId, conversationId);
+        }
         await refreshConversations();
       }
 
@@ -193,13 +225,14 @@ export default function App() {
 
     try {
       const conversation = await getConversation(conversationId);
+      const savedDocument = await getConversationDocument(conversationId);
 
       setActiveConversationId(conversation.id);
       setJurisdiction(conversation.jurisdiction);
       setCategory(conversation.category);
       setState(conversation.state || "");
 
-      setDocumentId(null);
+      setDocumentId(savedDocument?.document_id || null);
       setDocumentVersion((previous) => previous + 1);
 
       setMessages(
@@ -275,22 +308,42 @@ export default function App() {
     setError("");
   }
 
-  function handleDocumentUploaded(id) {
-    if (busyRef.current) return;
+  async function handleDocumentUploaded(id) {
+    if (busyRef.current || historyLoading) return;
 
-    setDocumentId(id);
-    setActiveConversationId(null);
-    setMessages([]);
+    busyRef.current = true;
+    setLoading(true);
     setError("");
+
+    try {
+      let conversationId = activeConversationId;
+      if (!conversationId) {
+        const conversation = await createConversation({
+          title: "PDF legal consultation",
+          jurisdiction,
+          category,
+          state: state.trim() || null,
+        });
+        conversationId = conversation.id;
+        setActiveConversationId(conversationId);
+      }
+      await attachDocument(id, conversationId);
+      setDocumentId(id);
+      setDocumentsRefreshKey((previous) => previous + 1);
+      await refreshConversations();
+    } catch (err) {
+      setError(err.message || "Unable to link PDF to conversation.");
+      // Do not set documentId until its association has succeeded.
+    } finally {
+      busyRef.current = false;
+      setLoading(false);
+    }
   }
 
   function handleRemoveDocument() {
     if (busyRef.current) return;
-
     setDocumentId(null);
     setDocumentVersion((previous) => previous + 1);
-    setActiveConversationId(null);
-    setMessages([]);
     setError("");
   }
 
@@ -367,18 +420,40 @@ export default function App() {
           </label>
         </section>
 
-        <DocumentUpload
-          key={`${jurisdiction}-${documentVersion}`}
-          jurisdiction={jurisdiction}
-          onUploaded={handleDocumentUploaded}
-          disabled={loading || historyLoading}
-        />
+        
+<DocumentUpload
+  key={`${jurisdiction}-${documentVersion}`}
+  jurisdiction={jurisdiction}
+  onUploaded={handleDocumentUploaded}
+  disabled={loading || historyLoading}
+/>
+
+
+<SavedDocuments
+  conversationId={activeConversationId}
+  refreshKey={documentsRefreshKey}
+  disabled={loading || historyLoading}
+  onSelectDocument={(id) => {
+    setDocumentId(id);
+    setError("");
+  }}
+  onDocumentDeleted={(deletedId) => {
+    if (documentId === deletedId) {
+      setDocumentId(null);
+      setDocumentVersion((previous) => previous + 1);
+    }
+
+    setDocumentsRefreshKey((previous) => previous + 1);
+    setError("");
+  }}
+/>
+
+
 
         {documentId && (
           <div className="document-status">
             <span>
-              Document uploaded and indexed successfully.
-              Questions will use the uploaded PDF.
+              PDF attached to this chat. Questions will use its contents.
             </span>
 
             <button
@@ -386,7 +461,7 @@ export default function App() {
               disabled={loading}
               onClick={handleRemoveDocument}
             >
-              Remove document
+              Stop using PDF
             </button>
           </div>
         )}

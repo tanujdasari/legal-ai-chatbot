@@ -613,3 +613,60 @@
   padding: 16px;
 }
 
+/* Saved document management */
+
+.saved-document-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 6px;
+  background: #1a2b45;
+  border: 1px solid #334155;
+  border-radius: 8px;
+}
+
+.saved-document-select {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 10px;
+  min-width: 0;
+  padding: 8px;
+  border: none;
+  background: transparent;
+  color: #e2e8f0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.saved-document-select span:nth-child(2) {
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+
+.saved-document-delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  background: #3b1c26;
+  border: 1px solid #7f1d1d;
+  border-radius: 8px;
+  color: #fca5a5;
+  cursor: pointer;
+}
+
+.saved-document-delete:hover:not(:disabled) {
+  background: #7f1d1d;
+  color: white;
+}
+
+.saved-document-select:disabled,
+.saved-document-delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
